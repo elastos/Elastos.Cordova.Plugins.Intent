@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='utf-8'?>
+<plugin id="elastos-cordova-plugin-intent" version="1.0.0"
+    xmlns="http://apache.org/cordova/ns/plugins/1.0"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <name>Intent</name>
+    <js-module name="Intent" src="www/Intent.js">
+        <clobbers target="appManager" />
+    </js-module>
+    <platform name="android">
+        <config-file parent="/*" target="res/xml/config.xml">
+            <feature name="Intent">
+                <param name="android-package" value="org.elastos.cordova.plugins.intent.IntentPlugin" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+        <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/activity" mode="overwrite">
+             <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode" android:label="@string/activity_name" android:launchMode="singleTop" android:name="org.elastos.cordova.plugins.intent.MainActivity" android:theme="@android:style/Theme.DeviceDefault.NoActionBar" android:windowSoftInputMode="adjustResize">
+            </activity>
+        </edit-config>
+
+        <source-file src="src/android/IntentPlugin.java" target-dir="src/org/elastos/cordova/plugins/intent" />
+        <source-file src="src/android/IntentInfo.java" target-dir="src/org/elastos/cordova/plugins/intent" />
+        <source-file src="src/android/IntentManager.java" target-dir="src/org/elastos/cordova/plugins/intent" />
+        <source-file src="src/android/MainActivity.java" target-dir="src/org/elastos/cordova/plugins/intent" />
+        <framework src="src/android/intent.gradle" custom="true" type="gradleReference"/>
+    </platform>
+    <!-- <platform name="ios">
+        <config-file parent="/*" target="config.xml">
+            <feature name="Intent">
+                <param name="ios-package" value="IntentPlugin" />
+                <param name="onload" value="true" />
+            </feature>
+        </config-file>
+        <source-file src="src/ios/IntentPlugin.swift" />
+    </platform> -->
+
+    <hook src="hooks/before_plugin_install/build_ts.js" type="before_plugin_install" />
+</plugin>

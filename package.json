@@ -1,0 +1,35 @@
+{
+  "name": "elastos-cordova-plugin-intent",
+  "version": "1.0.0",
+  "description": "Elastos Cordova Intent Plugin",
+  "cordova": {
+    "id": "elastos-cordova-plugin-intent",
+    "platforms": [
+      "android",
+      "ios"
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/elastos/Elastos.Cordova.Plugins.Intent.git"
+  },
+  "keywords": [
+    "cordova",
+    "intent",
+    "elastos",
+    "ecosystem:cordova",
+    "cordova-android",
+    "cordova-ios",
+    "cordova-browser"
+  ],
+  "author": "Dongxiao Chen",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/elastos/Elastos.Cordova.Plugins.Intent/issues"
+  },
+  "homepage": "https://github.com/elastos/Elastos.Cordova.Plugins.Intent#readme",
+  "scripts": {
+    "gen-docs": "jsdoc2md www/intent.js > README.md"
+  },
+  "types": "./www/types.d.ts"
+}
