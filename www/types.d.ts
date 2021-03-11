@@ -26,7 +26,7 @@
 * <br><br>
 * Usage:
 * <br>
-* declare let appManager: IntentPlugin.Intent;
+* declare let cordovaIntent: IntentPlugin.Intent;
 */
 
 declare namespace IntentPlugin {
@@ -61,7 +61,7 @@ declare namespace IntentPlugin {
          *
          * @param url        The intent url.
          */
-        sendUrlIntent(url: string): Promise<any>;
+        sendUrlIntent(url: string): Promise<void>;
 
         /**
          * Add intent listener for intent callback.

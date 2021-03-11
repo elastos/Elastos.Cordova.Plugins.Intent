@@ -73,9 +73,9 @@ public class IntentManager {
     private String intentRedirectFilter;
 
     IntentManager() {
-        String filters = MainActivity.instance.getPreferences().getString("InternalIntentFilter", "");
+        String filters = MainActivity.instance.getPreferences().getString("InternalIntentFilter", "internalIntent");
         internalIntentFilters = filters.split(" ");
-        intentRedirectFilter = MainActivity.instance.getPreferences().getString("IntentRedirectFilter", "https://cordova.elastos.net");
+        intentRedirectFilter = MainActivity.instance.getPreferences().getString("IntentRedirecturlFilter", "");
     }
 
     public static IntentManager getShareInstance() {
@@ -643,7 +643,7 @@ public class IntentManager {
         // The result object can be either a standard json object, or a {jwt:JWT} object.
         IntentResult intentResult = new IntentResult(result);
 
-        if (isReceiveExternal || isInternalIntent(info.action)) {
+        if (isReceiveExternal) {
             info.params = intentResult.payloadAsString();
             // If the called dapp has generated a JWT as output, we pass the decoded payload to the calling dapp
             // for convenience, but we also forward the raw JWT as this is required in some cases.
@@ -718,9 +718,6 @@ public class IntentManager {
         }
         else if (info.action.equals("openurl")) {
             sendNativeOpenUrlAction(info);
-        }
-        else if (isInternalIntent(info.action)) {
-            onReceiveIntent(info);
         }
         else {
             sendIntentToExternal(info);

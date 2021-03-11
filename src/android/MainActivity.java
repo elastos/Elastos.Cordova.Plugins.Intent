@@ -41,7 +41,6 @@ public class MainActivity extends CordovaActivity
         if ((action != null) && action.equals("android.intent.action.VIEW")) {
             Uri uri = intent.getData();
             if (uri != null) {
-                String url = uri.toString();
                 IntentManager.getShareInstance().setIntentUri(uri);
             }
         }

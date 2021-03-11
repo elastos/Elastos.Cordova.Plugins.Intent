@@ -41,13 +41,10 @@ class IntentImpl implements IntentPlugin.Intent {
           });
     }
 
-    sendUrlIntent(url: string): Promise<any> {
+    sendUrlIntent(url: string): Promise<void> {
         return new Promise((resolve, reject)=>{
-            exec((ret)=>{
-                if (typeof (ret.result) == "string") {
-                    ret.result = JSON.parse(ret.result);
-                }
-                resolve(ret);
+            exec(()=>{
+                resolve();
             },
             (err)=>{
                 reject(err);

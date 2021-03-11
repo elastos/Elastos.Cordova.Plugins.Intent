@@ -4,7 +4,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
     <name>Intent</name>
     <js-module name="Intent" src="www/Intent.js">
-        <clobbers target="appManager" />
+        <clobbers target="intentPlugin" />
     </js-module>
     <platform name="android">
         <config-file parent="/*" target="res/xml/config.xml">

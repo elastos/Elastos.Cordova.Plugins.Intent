@@ -76,11 +76,14 @@ public class IntentPlugin extends CordovaPlugin {
 
         if (IntentManager.getShareInstance().isInternalIntent(url)) {
             IntentManager.getShareInstance().receiveIntent(Uri.parse(url), callbackContext);
+            PluginResult pluginResult = new PluginResult(PluginResult.Status.NO_RESULT);
+            pluginResult.setKeepCallback(true);
+            callbackContext.sendPluginResult(pluginResult);
         }
         else {
             IntentManager.getShareInstance().showWebPage(url);
+            callbackContext.success();
         }
-        callbackContext.success();
     }
 
     protected void sendIntentResponse(JSONArray args, CallbackContext callbackContext) throws Exception {
