@@ -14,7 +14,7 @@
             </feature>
         </config-file>
         <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/activity" mode="overwrite">
-             <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode" android:label="@string/activity_name" android:launchMode="singleTop" android:name="org.elastos.cordova.plugins.intent.MainActivity" android:theme="@android:style/Theme.DeviceDefault.NoActionBar" android:windowSoftInputMode="adjustResize">
+             <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode" android:label="@string/activity_name" android:launchMode="singleTask" android:name="org.elastos.cordova.plugins.intent.MainActivity" android:theme="@android:style/Theme.DeviceDefault.NoActionBar" android:windowSoftInputMode="adjustResize">
             </activity>
         </edit-config>
 
