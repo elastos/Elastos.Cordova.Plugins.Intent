@@ -1,5 +1,5 @@
 {
-  "name": "elastos-cordova-plugin-intent",
+  "name": "@elastosfoundation/elastos-cordova-plugin-intent",
   "version": "1.0.0",
   "description": "Elastos Cordova Intent Plugin",
   "cordova": {
