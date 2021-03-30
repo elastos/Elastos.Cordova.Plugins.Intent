@@ -9,19 +9,19 @@
     <platform name="android">
         <config-file parent="/*" target="res/xml/config.xml">
             <feature name="Intent">
-                <param name="android-package" value="org.elastos.cordova.plugins.intent.IntentPlugin" />
+                <param name="android-package" value="org.elastos.plugins.intent.IntentPlugin" />
                 <param name="onload" value="true" />
             </feature>
         </config-file>
         <edit-config file="app/src/main/AndroidManifest.xml" target="/manifest/application/activity" mode="overwrite">
-             <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode" android:label="@string/activity_name" android:launchMode="singleTask" android:name="org.elastos.cordova.plugins.intent.MainActivity" android:theme="@android:style/Theme.DeviceDefault.NoActionBar" android:windowSoftInputMode="adjustResize">
+             <activity android:configChanges="orientation|keyboardHidden|keyboard|screenSize|locale|smallestScreenSize|screenLayout|uiMode" android:label="@string/activity_name" android:launchMode="singleTask" android:name="org.elastos.plugins.intent.MainActivity" android:theme="@android:style/Theme.DeviceDefault.NoActionBar" android:windowSoftInputMode="adjustResize">
             </activity>
         </edit-config>
 
-        <source-file src="src/android/IntentPlugin.java" target-dir="src/org/elastos/cordova/plugins/intent" />
-        <source-file src="src/android/IntentInfo.java" target-dir="src/org/elastos/cordova/plugins/intent" />
-        <source-file src="src/android/IntentManager.java" target-dir="src/org/elastos/cordova/plugins/intent" />
-        <source-file src="src/android/MainActivity.java" target-dir="src/org/elastos/cordova/plugins/intent" />
+        <source-file src="src/android/IntentPlugin.java" target-dir="src/org/elastos/plugins/intent" />
+        <source-file src="src/android/IntentInfo.java" target-dir="src/org/elastos/plugins/intent" />
+        <source-file src="src/android/IntentManager.java" target-dir="src/org/elastos/plugins/intent" />
+        <source-file src="src/android/MainActivity.java" target-dir="src/org/elastos/plugins/intent" />
         <framework src="src/android/intent.gradle" custom="true" type="gradleReference"/>
     </platform>
     <!-- <platform name="ios">
