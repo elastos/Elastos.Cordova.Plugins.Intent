@@ -3,12 +3,12 @@
     xmlns="http://apache.org/cordova/ns/plugins/1.0"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <name>Intent</name>
-    <js-module name="Intent" src="www/Intent.js">
-        <clobbers target="intentPlugin" />
+    <js-module name="IntentManager" src="www/Intent.js">
+        <clobbers target="intentManager" />
     </js-module>
     <platform name="android">
         <config-file parent="/*" target="res/xml/config.xml">
-            <feature name="Intent">
+            <feature name="IntentManager">
                 <param name="android-package" value="org.elastos.plugins.intent.IntentPlugin" />
                 <param name="onload" value="true" />
             </feature>

@@ -21,12 +21,12 @@
 */
 
 /**
-* This is an internal plugin for Elastos Cordova in order to manage internal and external
+* This is an plugin for Elastos Cordova in order to manage external
 * inter-app communications through "intents".
 * <br><br>
 * Usage:
 * <br>
-* declare let cordovaIntent: IntentPlugin.Intent;
+* declare let intentManager: IntentPlugin.IntentManager;
 */
 
 declare namespace IntentPlugin {
@@ -38,16 +38,16 @@ declare namespace IntentPlugin {
         action: string;
         /** Custom intent parameters provided by the calling application. */
         params: any;
-        /** Application package id of the calling application. */
+        /** The intent id of the calling application. */
         intentId: number;
-        /** In case the intent comes from outside elastOS and was received as a JWT, this JWT is provided here. */
+        /** In case the intent comes from outside essentials and was received as a JWT, this JWT is provided here. */
         originalJwtRequest?: string;
     }
 
     /**
-     * The class representing dapp manager for launcher.
+     * Root manager allowing to send native requests to other native apps and receive responses.
      */
-    interface Intent {
+    interface IntentManager {
         /**
          * Send a intent by action.
          *
