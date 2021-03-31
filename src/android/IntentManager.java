@@ -75,12 +75,12 @@ public class IntentManager {
     private boolean listenerReady = false;
     protected CallbackContext mIntentContext = null;
     private String[] internalIntentFilters;
-    private String intentRedirectFilter;
+    private String IntentRedirecturlFilter;
 
     IntentManager() {
         String filters = MainActivity.instance.getPreferences().getString("InternalIntentFilter", "internalIntent");
         internalIntentFilters = filters.split(" ");
-        intentRedirectFilter = MainActivity.instance.getPreferences().getString("IntentRedirecturlFilter", "");
+        IntentRedirecturlFilter = MainActivity.instance.getPreferences().getString("IntentRedirecturlFilter", null);
     }
 
     public static IntentManager getShareInstance() {
@@ -503,10 +503,16 @@ public class IntentManager {
 
         // If there is no redirect url, we add one to be able to receive responses
         if (!params.has("redirecturl")) {
-            // "intentresponse" is added For trinity native. NOTE: we should maybe move this out of this method
-            url = addParamLinkChar(url);
-
-            url += "redirecturl=" + intentRedirectFilter + "/intentresponse%3FintentId=" + info.intentId; // Ex: diddemo:///intentresponse?intentId=xxx
+            if (IntentRedirecturlFilter == null) {
+                MainActivity.instance.runOnUiThread(() -> {
+                    alertDialog("Invalid intent redirect url filter", "Please set 'IntentRedirecturlFilter' preference in app's config.xml.");
+                });
+            }
+            else {
+                // "intentresponse" is added For trinity native. NOTE: we should maybe move this out of this method
+                url = addParamLinkChar(url);
+                url += "redirecturl=" + IntentRedirecturlFilter + "/intentresponse%3FintentId=" + info.intentId; // Ex: diddemo:///intentresponse?intentId=xxx
+            }
         }
 
         System.out.println("INTENT DEBUG: " + url);
