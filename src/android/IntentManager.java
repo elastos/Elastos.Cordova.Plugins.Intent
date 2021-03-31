@@ -133,18 +133,14 @@ public class IntentManager {
         ab.show();
     }
 
-    private  void doIntent(Uri uri) {
-        if (!uri.toString().contains("redirecturl") && uri.toString().contains("/intentresponse"))
-            receiveExternalIntentResponse(uri);
-        else
-            doIntentByUri(uri);
-    }
-
     public void setIntentUri(Uri uri) {
         if (uri == null) return;
 
-        if (listenerReady) {
-            doIntent(uri);
+        if (!uri.toString().contains("redirecturl") && uri.toString().contains("/intentresponse")) {
+            receiveExternalIntentResponse(uri);
+        }
+        else if (listenerReady) {
+            doIntentByUri(uri);
         }
         else {
             intentUriList.add(uri);
@@ -157,7 +153,7 @@ public class IntentManager {
 
         for (int i = 0; i < intentUriList.size(); i++) {
             Uri uri = intentUriList.get(i);
-            doIntent(uri);
+            doIntentByUri(uri);
         }
         intentUriList.clear();
     }
