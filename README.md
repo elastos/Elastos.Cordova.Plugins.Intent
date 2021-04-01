@@ -3,7 +3,7 @@ title: IntentManager
 description: This is an plugin for Elastos Cordova in order to manage external inter-app communications through "intents".
 ---
 
-# elastos-cordova-plugin-intent
+# @elastosfoundation/elastos-cordova-plugin-intent
 
 This plugin defines a global `cordova.intentManager` object, which provides an API for intent manager library.
 
@@ -26,7 +26,7 @@ declare let intentManager: IntentPlugin.IntentManager;
 ## Installation
 
 ```bash
-    cordova plugin add elastos-cordova-plugin-hive
+    cordova plugin add @elastosfoundation/elastos-cordova-plugin-intent
 ```
 
 ## Cofigure
