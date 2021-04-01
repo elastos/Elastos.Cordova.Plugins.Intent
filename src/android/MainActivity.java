@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package org.elastos.cordova.plugins.intent;
+package org.elastos.plugins.intent;
 
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;

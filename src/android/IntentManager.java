@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package org.elastos.cordova.plugins.intent;
+package org.elastos.plugins.intent;
 
 import android.annotation.SuppressLint;
 import android.app.Activity;

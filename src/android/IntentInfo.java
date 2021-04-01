@@ -20,7 +20,7 @@
  * SOFTWARE.
  */
 
-package org.elastos.cordova.plugins.intent;
+package org.elastos.plugins.intent;
 
 import org.apache.cordova.CallbackContext;
 import org.json.JSONObject;
