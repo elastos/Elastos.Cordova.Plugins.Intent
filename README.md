@@ -128,7 +128,7 @@ Send a intent respone by id.
 | result | <code>Object</code> | The intent respone result. |
 | intentId | <code>long</code> | The intent id. |
 
-<a name="BootstrapNode"></a>
+<a name="ReceivedIntent"></a>
 
 ## ReceivedIntent : <code>Object</code>
 Information about an intent request.
