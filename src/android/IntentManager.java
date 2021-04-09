@@ -36,16 +36,14 @@ import android.util.Log;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import org.apache.cordova.CallbackContext;
-import org.apache.cordova.PluginResult;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.elastos.did.DID;
 import org.elastos.did.DIDDocument;
-import org.elastos.essentials.plugins.did.DIDPlugin;
 import org.elastos.did.VerifiableCredential;
+import org.elastos.essentials.plugins.did.DIDPlugin;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -65,6 +63,8 @@ import io.jsonwebtoken.Jwts;
 import org.apache.http.client.HttpClient;
 import org.json.JSONTokener;
 
+import org.apache.cordova.*;
+
 public class IntentManager {
     private static final String LOG_TAG = "IntentManager";
 
@@ -76,11 +76,10 @@ public class IntentManager {
     protected CallbackContext mIntentContext = null;
     private String[] internalIntentFilters;
     private String intentRedirecturlFilter;
+    private Activity activity;
 
     IntentManager() {
-        String filters = MainActivity.instance.getPreferences().getString("InternalIntentFilter", "internalIntent");
-        internalIntentFilters = filters.split(" ");
-        intentRedirecturlFilter = MainActivity.instance.getPreferences().getString("IntentRedirecturlFilter", null);
+
     }
 
     public static IntentManager getShareInstance() {
@@ -88,6 +87,14 @@ public class IntentManager {
             IntentManager.intentManager = new IntentManager();
         }
         return IntentManager.intentManager;
+    }
+
+    public void setActivity(Activity activity, CordovaPreferences preferences) {
+        listenerReady = false;
+        this.activity = activity;
+        String filters = preferences.getString("InternalIntentFilter", "");
+        internalIntentFilters = filters.split(" ");
+        intentRedirecturlFilter = preferences.getString("IntentRedirecturlFilter", "https://essentials.elastos.net");
     }
 
     public boolean isInternalIntent(String action) {
@@ -114,11 +121,10 @@ public class IntentManager {
         intent.addCategory(Intent.CATEGORY_BROWSABLE);
         Uri uri = Uri.parse(url);
         intent.setData(uri);
-        MainActivity.instance.startActivity(intent);
+        activity.startActivity(intent);
     }
 
-    public static void alertDialog(String title, String msg) {
-        Activity activity = MainActivity.instance;
+    public void alertDialog(String title, String msg) {
         AlertDialog.Builder ab = new AlertDialog.Builder(activity);
         ab.setTitle(title);
         ab.setMessage(msg);
@@ -308,8 +314,7 @@ public class IntentManager {
             }
             Set<String> set = uri.getQueryParameterNames();
 
-            info = new IntentInfo(action, null, null);
-            info.callbackContext = callbackContext;
+            info = new IntentInfo(action, null, callbackContext);
 
             if (set.size() > 0) {
                 getParamsByUri(uri, info);
@@ -337,8 +342,8 @@ public class IntentManager {
                 else {
                     System.err.println(errorMessage);
 
-                    MainActivity.instance.runOnUiThread(() -> {
-                        alertDialog("Invalid intent received", "The received intent could not be handled and returned the following error: "+errorMessage);
+                    activity.runOnUiThread(() -> {
+                        this.alertDialog("Invalid intent received", "The received intent could not be handled and returned the following error: "+errorMessage);
                     });
                 }
             });
@@ -386,7 +391,7 @@ public class IntentManager {
     @SuppressLint("StaticFieldLeak")
     private void checkExternalIntentValidityForAppDID(IntentInfo info, String appDid, OnExternalIntentValidityListener callback) throws Exception {
         // DIRTY to call the DID Plugin from here, but no choice for now because of the static DID back end...
-        DIDPlugin.initializeDIDBackend(MainActivity.instance);
+        DIDPlugin.initializeDIDBackend(activity);
 
         new AsyncTask<Void, Void, DIDDocument>() {
             @Override
@@ -500,7 +505,7 @@ public class IntentManager {
         // If there is no redirect url, we add one to be able to receive responses
         if (!params.has("redirecturl")) {
             if (intentRedirecturlFilter == null) {
-                MainActivity.instance.runOnUiThread(() -> {
+                activity.runOnUiThread(() -> {
                     alertDialog("Invalid intent redirect url filter", "Please set 'IntentRedirecturlFilter' preference in app's config.xml.");
                 });
             }
@@ -639,7 +644,7 @@ public class IntentManager {
         }
     }
 
-    public void sendIntentResponse(String result, long intentId, boolean isReceiveExternal) throws Exception {
+    public void sendIntentResponse(String result, long intentId) throws Exception {
         // Retrieve intent context information for the given intent id
         IntentInfo info = intentContextList.get(intentId);
         if (info == null) {
@@ -650,44 +655,42 @@ public class IntentManager {
         // The result object can be either a standard json object, or a {jwt:JWT} object.
         IntentResult intentResult = new IntentResult(result);
 
-        if (isReceiveExternal) {
+        String url = info.redirecturl;
+        if (url == null) {
+            url = info.callbackurl;
+        }
+
+        // If there is a provided URL callback for the intent, we want to send the intent response to that url
+        if (url != null) {
+            String jwt;
+            if (intentResult.isAlreadyJWT())
+                jwt = intentResult.jwt;
+            else {
+                // App did not return a JWT, so we return an unsigned JWT instead
+                jwt = createUnsignedJWTResponse(info, result);
+            }
+
+            // Response url can't be handled by trinity. So we either call an intent to open it, or HTTP POST data
+            if (info.redirecturl != null) {
+                if (intentResult.isAlreadyJWT())
+                    url = getJWTRedirecturl(info.redirecturl, jwt);
+                else
+                    url = getResultUrl(url, intentResult.payloadAsString()); // Pass the raw data as a result= field
+                showWebPage(url);
+            } else if (info.callbackurl != null) {
+                if (intentResult.isAlreadyJWT())
+                    postCallback("jwt", jwt, info.callbackurl);
+                else
+                    postCallback("result", intentResult.payloadAsString(), info.callbackurl);
+            }
+        }
+        else if (info.callbackContext != null) {
             info.params = intentResult.payloadAsString();
             // If the called dapp has generated a JWT as output, we pass the decoded payload to the calling dapp
             // for convenience, but we also forward the raw JWT as this is required in some cases.
             if (intentResult.isAlreadyJWT())
                 info.responseJwt = intentResult.jwt;
             onReceiveIntentResponse(info);
-        }
-        else {
-            String url = info.redirecturl;
-            if (url == null) {
-                url = info.callbackurl;
-            }
-
-            // If there is a provided URL callback for the intent, we want to send the intent response to that url
-            if (url != null) {
-                String jwt;
-                if (intentResult.isAlreadyJWT())
-                    jwt = intentResult.jwt;
-                else {
-                    // App did not return a JWT, so we return an unsigned JWT instead
-                    jwt = createUnsignedJWTResponse(info, result);
-                }
-
-                // Response url can't be handled by trinity. So we either call an intent to open it, or HTTP POST data
-                if (info.redirecturl != null) {
-                    if (intentResult.isAlreadyJWT())
-                        url = getJWTRedirecturl(info.redirecturl, jwt);
-                    else
-                        url = getResultUrl(url, intentResult.payloadAsString()); // Pass the raw data as a result= field
-                    showWebPage(url);
-                } else if (info.callbackurl != null) {
-                    if (intentResult.isAlreadyJWT())
-                        postCallback("jwt", jwt, info.callbackurl);
-                    else
-                        postCallback("result", intentResult.payloadAsString(), info.callbackurl);
-                }
-            }
         }
     }
 
@@ -713,7 +716,7 @@ public class IntentManager {
         }
 
         try {
-            sendIntentResponse(resultStr, intentId, true);
+            sendIntentResponse(resultStr, intentId);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -797,7 +800,7 @@ public class IntentManager {
             sendIntent.setType("text/plain");
 
             android.content.Intent shareIntent = android.content.Intent.createChooser(sendIntent, null);
-            MainActivity.instance.startActivity(shareIntent);
+            activity.startActivity(shareIntent);
         }
     }
 
@@ -842,7 +845,7 @@ public class IntentManager {
             sendIntent.setData(extractedParams.url);
 
             android.content.Intent shareIntent = android.content.Intent.createChooser(sendIntent, null);
-            MainActivity.instance.startActivity(shareIntent);
+            activity.startActivity(shareIntent);
         }
     }
 }
