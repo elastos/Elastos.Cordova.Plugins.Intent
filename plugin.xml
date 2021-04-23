@@ -22,15 +22,32 @@
         <source-file src="src/android/IntentManager.java" target-dir="src/org/elastos/plugins/intent" />
         <framework src="src/android/intent.gradle" custom="true" type="gradleReference"/>
     </platform>
-    <!-- <platform name="ios">
+    <platform name="ios">
+        <dependency id="cordova-plugin-add-swift-support"/>
         <config-file parent="/*" target="config.xml">
-            <feature name="Intent">
+            <feature name="IntentManager">
                 <param name="ios-package" value="IntentPlugin" />
                 <param name="onload" value="true" />
             </feature>
         </config-file>
+
+         <podspec>
+            <config>
+                <source url="https://cdn.cocoapods.org/"/>
+            </config>
+            <pods use-frameworks="true">
+                <pod name="SwiftJWT" spec="~> 3.5.3" swift-version="4.2"/>
+                <pod name="ElastosDIDSDK" spec='~> 1.9'/>
+                <pod name="AnyCodable-FlightSchool" spec='~> 0.2.3'/>
+                <pod name="PopupDialog" spec="~> 1.1"/>
+            </pods>
+        </podspec>
+
         <source-file src="src/ios/IntentPlugin.swift" />
-    </platform> -->
+        <source-file src="src/ios/IntentManager.swift" />
+        <header-file src="src/ios/IntentManager-Bridging-Header.h" type="BridgingHeader" />
+        <source-file src="src/ios/IntentUtility.swift" />
+    </platform>
 
     <hook src="hooks/before_plugin_install/build_ts.js" type="before_plugin_install" />
 </plugin>

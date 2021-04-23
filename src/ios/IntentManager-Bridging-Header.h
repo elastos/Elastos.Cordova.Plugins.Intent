@@ -1,5 +1,5 @@
  /*
-  * Copyright (c) 2018 Elastos Foundation
+  * Copyright (c) 2021 Elastos Foundation
   *
   * Permission is hereby granted, free of charge, to any person obtaining a copy
   * of this software and associated documentation files (the "Software"), to deal
@@ -20,23 +20,4 @@
   * SOFTWARE.
   */
 
-repositories {
-    jcenter()
-}
-
-android {
-    useLibrary 'org.apache.http.legacy'
-}
-
-dependencies {
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.9'
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.9'
-    api 'io.jsonwebtoken:jjwt-api:0.11.1'
-    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.1'
-    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.0'
-    runtimeOnly('io.jsonwebtoken:jjwt-orgjson:0.11.1') {
-        exclude group: 'org.json', module: 'json' //provided by Android natively
-    }
-    implementation 'com.android.support:appcompat-v7:23.1.1'
-    implementation 'org.elastos.did:didsdk:1.3'
-}
+ #import "AppDelegate.h"
