@@ -33,7 +33,7 @@
     var isChangeIconPath = false;
 
     override func pluginInitialize() {
-        IntentManager.getShareInstance().setViewController(viewController as! CDVViewController);
+        IntentManager.getShareInstance().setViewController(viewController as! CDVViewController, self.commandDelegate);
     }
 
     //---------------------------------------------------------
@@ -143,6 +143,6 @@
         let result = CDVPluginResult(status: CDVCommandStatus_NO_RESULT);
         result?.setKeepCallbackAs(true);
         self.commandDelegate?.send(result, callbackId: command.callbackId)
-        try? IntentManager.getShareInstance().setListenerReady(command.callbackId, self.commandDelegate);
+        try? IntentManager.getShareInstance().setListenerReady(command.callbackId);
     }
  }
