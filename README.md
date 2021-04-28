@@ -66,7 +66,8 @@ declare let intentManager: IntentPlugin.IntentManager;
         </config-file>
     </platform>
 ```
-about
+
+- About such as "XXX.sample.net" configuring in ios please reference: https://developer.elastos.org/build/elastos/trinity-native/quick_start/#configuring-your-domain-for-ios-apps
 
 - In android platform, need add "AndroidLaunchMode = singleTask" for receive external intent in the same activity.
 ```xml
