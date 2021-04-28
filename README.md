@@ -38,31 +38,42 @@ declare let intentManager: IntentPlugin.IntentManager;
 ```
 
 ### config.xml
-- Add IntentRedirecturlFilter. such as:
-```xml
-    <preference name="IntentRedirecturlFilter" value="https://test.intentmanager.elastos.net" />
-```
-
+- Specific IntentRedirecturlFilter, with custom scheme for android vs https url for ios. such as
 ```xml
     <platform name="android">
+        <preference name="IntentRedirecturlFilter" value="XXX://" />
         <config-file parent="/manifest/application/activity" target="AndroidManifest.xml">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data android:host="test.intentmanager.elastos.net" android:pathPattern="/.*" android:scheme="https" />
+                <data android:scheme="XXX" />
             </intent-filter>
         </config-file>
     </platform>
-```
 
-- In android platform
+    <platform name="ios">
+        <preference name="IntentRedirecturlFilter" value="https://XXX.sample.net" />
+        <config-file parent="com.apple.developer.associated-domains" target="*-Debug.plist">
+            <array>
+                <string>applinks:XXX.sample.net</string>
+            </array>
+        </config-file>
+        <config-file parent="com.apple.developer.associated-domains" target="*-Release.plist">
+            <array>
+                <string>applinks:XXX.sample.net</string>
+            </array>
+        </config-file>
+    </platform>
+```
+about
+
+- In android platform, need add "AndroidLaunchMode = singleTask" for receive external intent in the same activity.
 ```xml
     <platform name="android">
         <preference name="AndroidLaunchMode" value="singleTask" />
     </platform>
 ```
-
 ## Supported Platforms
 
 - Android
