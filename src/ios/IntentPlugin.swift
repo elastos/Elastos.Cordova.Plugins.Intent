@@ -87,7 +87,7 @@
 
     @objc func sendIntent(_ command: CDVInvokedUrlCommand) {
         let action = command.arguments[0] as? String ?? "";
-        let params = command.arguments[1] as? String ?? "";
+        let params = command.arguments[1] as? String ?? nil;
 
         let info = IntentInfo(action, params, command.callbackId);
 
