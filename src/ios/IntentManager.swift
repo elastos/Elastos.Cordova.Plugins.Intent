@@ -194,9 +194,7 @@
     }
 
     private func initializeDIDBackend() throws {
-        let cacheDir = NSHomeDirectory() + "/Documents/data/did/.cache.did.elastos";
-        let resolverUrl = "https://api.elastos.io/did";
-        try DIDBackend.initializeInstance(resolverUrl, cacheDir)
+        try DIDBackend.initialize(DefaultDIDAdapter("https://api.elastos.io/eid"));
     }
 
     func setIntentUri(_ uri: URL) {
@@ -257,7 +255,7 @@
 
     //TODO:: synchronized?
     private func addToIntentContextList(_ info: IntentInfo) {
-        var intentInfo = intentContextList[info.intentId];
+        let intentInfo = intentContextList[info.intentId];
         if (intentInfo != nil) {
             return
         }
@@ -390,7 +388,7 @@
                     }
                 }
                 else {
-                    print(errorMessage)
+                    print(errorMessage ?? "onReceiveIntent error")
                     self.alertDialog("Invalid intent received", "The received intent could not be handled and returned the following error: " + errorMessage!);
                 }
             }
@@ -442,7 +440,7 @@
                     if let nativeCredential = try didDocument.credential(ofId: "#native") {
                         // Check redirect url, if any
                         if (info.redirecturl != nil && info.redirecturl != "") {
-                            if let onChainRedirectUrl = nativeCredential.subject.getPropertyAsString(ofName:"redirectUrl") {
+                            if let onChainRedirectUrl = nativeCredential.subject?.getPropertyAsString(ofName:"redirectUrl") {
                                 // We found a redirect url in the app DID document. Check that it matches the one in the intent
                                 if (info.redirecturl!.hasPrefix(onChainRedirectUrl)) {
                                     // Everything ok.
@@ -458,7 +456,7 @@
                         }
                         // Check callback url, if any
                         else if (info.callbackurl != nil && info.callbackurl != "") {
-                            if let onChainCallbackUrl = nativeCredential.subject.getPropertyAsString(ofName:"callbackUrl") {
+                            if let onChainCallbackUrl = nativeCredential.subject?.getPropertyAsString(ofName:"callbackUrl") {
                                 // We found a callback url in the app DID document. Check that it matches the one in the intent
                                 if (info.callbackurl!.hasPrefix(onChainCallbackUrl)) {
                                     // Everything ok.

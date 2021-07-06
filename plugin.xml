@@ -37,7 +37,7 @@
             </config>
             <pods use-frameworks="true">
                 <pod name="SwiftJWT" spec="~> 3.5.3" swift-version="4.2"/>
-                <pod name="ElastosDIDSDK" spec='~> 1.9'/>
+                <pod name="ElastosDIDSDK" spec='~> 2.1.0'/>
                 <pod name="AnyCodable-FlightSchool" spec='~> 0.2.3'/>
                 <pod name="PopupDialog" spec="~> 1.1"/>
             </pods>
