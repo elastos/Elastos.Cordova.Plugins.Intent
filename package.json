@@ -1,6 +1,6 @@
 {
   "name": "@elastosfoundation/elastos-cordova-plugin-intent",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Elastos Cordova Intent Manager Plugin",
   "cordova": {
     "id": "@elastosfoundation/elastos-cordova-plugin-intent",
