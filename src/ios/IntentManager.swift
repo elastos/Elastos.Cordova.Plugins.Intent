@@ -683,7 +683,7 @@
         }
 
         // If there is a provided URL callback for the intent, we want to send the intent response to that url
-        if (urlString != nil) {
+        if (urlString != nil && urlString != "") {
             var jwt: String? = nil
             if intentResult.isAlreadyJWT() {
                 jwt = intentResult.jwt
@@ -704,7 +704,7 @@
                 }
                 openUrl(urlString!)
             }
-            else if (info!.callbackurl != nil) {
+            else if (info!.callbackurl != nil && info!.callbackurl != "") {
                 if (intentResult.isAlreadyJWT()) {
                     try postCallback("jwt", jwt!, info!.callbackurl!)
                 }

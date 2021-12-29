@@ -661,7 +661,7 @@ public class IntentManager {
         }
 
         // If there is a provided URL callback for the intent, we want to send the intent response to that url
-        if (url != null) {
+        if (url != null && !url.equals("")) {
             String jwt;
             if (intentResult.isAlreadyJWT())
                 jwt = intentResult.jwt;
@@ -677,7 +677,8 @@ public class IntentManager {
                 else
                     url = getResultUrl(url, intentResult.payloadAsString()); // Pass the raw data as a result= field
                 showWebPage(url);
-            } else if (info.callbackurl != null) {
+            }
+            else if (info.callbackurl != null && !info.callbackurl.equals("")) {
                 if (intentResult.isAlreadyJWT())
                     postCallback("jwt", jwt, info.callbackurl);
                 else
